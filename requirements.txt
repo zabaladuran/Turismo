@@ -3,4 +3,7 @@ Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.1.1
 WTForms==3.0.1
+<<<<<<< HEAD
 gunicorn
+=======
+>>>>>>> 0fcb189e2fdeabe4b7665176cdfd62ceeb9ff7c8
