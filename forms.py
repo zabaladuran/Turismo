@@ -4,6 +4,7 @@ Define los formularios web con validaciones usando Flask-WTF
 """
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, IntegerField, FloatField, SelectField, BooleanField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import DataRequired, NumberRange, Length, Optional
 
 class HotelForm(FlaskForm):
@@ -42,10 +43,14 @@ class HotelForm(FlaskForm):
     descripcion = TextAreaField('Descripción', 
                                validators=[Length(max=1000, message='Máximo 1000 caracteres')])
     
+
     # Precio por noche
     precio_noche = FloatField('Precio por Noche (USD)', 
                              validators=[DataRequired(message='El precio es obligatorio'),
                                        NumberRange(min=1, message='El precio debe ser mayor a 0')])
+
+    # Imagen del hotel (opcional)
+    imagen = FileField('Imagen del Hotel', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Solo imágenes')])
 
 class PaqueteForm(FlaskForm):
     """

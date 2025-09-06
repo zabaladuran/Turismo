@@ -39,6 +39,9 @@ class Hotel(db.Model):
     
     # Fecha de creación del registro
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Nombre del archivo de imagen del hotel (opcional)
+    imagen = db.Column(db.String(200))
     
     # Relación con paquetes turísticos
     paquetes = db.relationship('PaqueteTuristico', backref='hotel_incluido', lazy=True)

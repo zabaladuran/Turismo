@@ -19,7 +19,7 @@
         <!-- Formulario -->
         <div class="card border-0 shadow">
             <div class="card-body p-4">
-                <form method="POST" novalidate>
+                <form method="POST" enctype="multipart/form-data" novalidate>
                     {{ form.hidden_tag() }}
                     
                     <!-- Información básica -->
@@ -36,6 +36,15 @@
                                 {% if form.nombre.errors %}
                                     <div class="invalid-feedback">
                                         {% for error in form.nombre.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.imagen.label(class="form-label") }}
+                                {{ form.imagen(class="form-control") }}
+                                {% if form.imagen.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.imagen.errors %}{{ error }}{% endfor %}
                                     </div>
                                 {% endif %}
                             </div>

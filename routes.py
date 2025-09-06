@@ -2,6 +2,7 @@
 Rutas y controladores del sistema de turismo
 Define todas las URLs y la lógica de cada página
 """
+
 from flask import render_template, request, redirect, url_for, flash
 from models import db, Hotel, PaqueteTuristico
 from forms import HotelForm, PaqueteForm
@@ -51,15 +52,27 @@ def init_routes(app):
         
         return render_template('hoteles/lista.html', hoteles=hoteles, busqueda=busqueda)
     
+
     @app.route('/hoteles/crear', methods=['GET', 'POST'])
     def crear_hotel():
         """
         Formulario para crear un nuevo hotel
         Maneja tanto GET (mostrar formulario) como POST (procesar datos)
         """
+        import os
+        from werkzeug.utils import secure_filename
         form = HotelForm()
-        
+
         if form.validate_on_submit():
+            # Procesar imagen si se subió
+            imagen_filename = None
+            if form.imagen.data:
+                imagen_file = form.imagen.data
+                filename = secure_filename(imagen_file.filename)
+                imagen_path = os.path.join('static', 'img', filename)
+                imagen_file.save(imagen_path)
+                imagen_filename = filename
+
             # Crear nuevo hotel con los datos del formulario
             hotel = Hotel(
                 nombre=form.nombre.data,
@@ -68,9 +81,10 @@ def init_routes(app):
                 direccion=form.direccion.data,
                 estrellas=form.estrellas.data,
                 descripcion=form.descripcion.data,
-                precio_noche=form.precio_noche.data
+                precio_noche=form.precio_noche.data,
+                imagen=imagen_filename
             )
-            
+
             try:
                 # Guardar en la base de datos
                 db.session.add(hotel)
@@ -81,7 +95,7 @@ def init_routes(app):
                 # Manejar errores de base de datos
                 db.session.rollback()
                 flash(f'Error al crear hotel: {str(e)}', 'error')
-        
+
         return render_template('hoteles/crear.html', form=form)
     
     @app.route('/hoteles/<int:hotel_id>')
